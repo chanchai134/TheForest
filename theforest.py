@@ -47,7 +47,7 @@ class GameWindow(arcade.Window):
                                         self.slingshot_setting.mouse_y)
     def update(self, delta_time):
         #print(self.mouse_hold)
-        print("(x,y) = ("+str(self.grape_setting.x)+","+str(self.grape_setting.y)+")")
+        #print("(x,y) = ("+str(self.grape_setting.x)+","+str(self.grape_setting.y)+")")
         if self.shoot_enable:
             self.grape_setting.setup_shoot(6,self.slingshot_setting.getAngle())
             self.grape_setting.shoot()

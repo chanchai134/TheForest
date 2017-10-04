@@ -46,4 +46,4 @@ class Slingshot_F(Model_F):
         self.mouse_x = mouse_x
         self.mouse_y = mouse_y
     def getAngle(self):
-        return math.atan2(self.shoot_x-self.mouse_y ,self.shoot_x-self.mouse_x)
+        return math.atan2(self.shoot_y-self.mouse_y ,self.shoot_x-self.mouse_x)
