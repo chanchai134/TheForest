@@ -4,7 +4,7 @@ import sprite_theforest
 
 SCREEN_WIDTH = 1700
 SCREEN_HEIGHT = 700
-GRAVITY = 0.05
+GRAVITY = 0.35
 
 class GameWindow(arcade.Window):
     def __init__(self, width, height,title):
@@ -14,6 +14,7 @@ class GameWindow(arcade.Window):
         self.mouse_x = None
         self.mouse_y = None
         self.shoot_enable = None
+        self.mouse_enable = True
         self.slingshot_setting = model_theforest.Slingshot_F(80,182,350,150,0,70)
         self.slingshot_sprite = sprite_theforest.Slingshot_sprite("images/slingshot.png",self.slingshot_setting)
         self.grape_setting = model_theforest.Grape_F(75,91,350,220,GRAVITY)
@@ -33,27 +34,37 @@ class GameWindow(arcade.Window):
             self.shoot_enable = True
     def on_draw(self):
         arcade.start_render()
-        self.slingshot_sprite.draw_line_R(self.slingshot_setting.mouse_hold,
-                                        self.slingshot_setting.shoot_x, 
-                                        self.slingshot_setting.shoot_y, 
-                                        self.slingshot_setting.mouse_x, 
-                                        self.slingshot_setting.mouse_y)
+        if self.mouse_enable:
+            self.slingshot_sprite.draw_line_R(self.slingshot_setting.mouse_hold,
+                                            self.slingshot_setting.shoot_x, 
+                                            self.slingshot_setting.shoot_y, 
+                                            self.slingshot_setting.mouse_x, 
+                                            self.slingshot_setting.mouse_y)
         self.slingshot_sprite.draw()
         self.grape_sprite.draw()
-        self.slingshot_sprite.draw_line_L(self.slingshot_setting.mouse_hold,
-                                        self.slingshot_setting.shoot_x, 
-                                        self.slingshot_setting.shoot_y, 
-                                        self.slingshot_setting.mouse_x, 
-                                        self.slingshot_setting.mouse_y)
+        if self.mouse_enable:
+            self.slingshot_sprite.draw_line_L(self.slingshot_setting.mouse_hold,
+                                            self.slingshot_setting.shoot_x, 
+                                            self.slingshot_setting.shoot_y, 
+                                            self.slingshot_setting.mouse_x, 
+                                            self.slingshot_setting.mouse_y)
     def update(self, delta_time):
         #print(self.mouse_hold)
         #print("(x,y) = ("+str(self.grape_setting.x)+","+str(self.grape_setting.y)+")")
+        if self.slingshot_setting.mouse_hold:
+            self.grape_setting.x = self.slingshot_setting.mouse_x
+            self.grape_setting.y = self.slingshot_setting.mouse_y
         if self.shoot_enable:
-            self.grape_setting.setup_shoot(6,self.slingshot_setting.getAngle())
+            self.grape_setting.setup_shoot(self.slingshot_setting.getVelocity(),self.slingshot_setting.getAngle())
             self.grape_setting.shoot()
+            self.mouse_enable = False
         self.grape_sprite.update()
         self.slingshot_sprite.update()
         self.slingshot_setting.updateMouse(self.mouse_x, self.mouse_y, self.mouse_hold)
+        ''' Out Screen Edge '''
+        if self.grape_setting.isOutScreen(SCREEN_WIDTH,SCREEN_HEIGHT):
+            self.shoot_enable = False
+            self.mouse_enable = True
            
 if __name__ == '__main__':
     runGame = GameWindow(SCREEN_WIDTH,SCREEN_HEIGHT,"TheForest")
