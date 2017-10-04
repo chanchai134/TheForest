@@ -26,4 +26,7 @@ class Grape_F(Shoot_F):
     def __init__(self, width, height, x, y, velocity, gravity, angle):
         super().__init__(width, height, x, y, velocity, gravity, angle)
 
-        
+class Slingshot_F(Model_F):
+    def __init__(self, width, height, x, y):
+        super().__init__(width, height, x, y)
+            
