@@ -15,10 +15,10 @@ class GameWindow(arcade.Window):
         self.mouse_y = 0
         self.shoot_enable = None
         self.mouse_enable = True
-        self.slingshot_setting = model_theforest.Slingshot_F(80,182,350,150,0,70)
+        self.slingshot_setting = model_theforest.Slingshot_F(80,248,350,150,0,103)
         self.slingshot_sprite = sprite_theforest.Slingshot_sprite("images/slingshot.png",self.slingshot_setting)
         self.hand_sprite = sprite_theforest.Hand_sprite("images/hand.png",self.slingshot_setting)
-        self.grape_setting = model_theforest.Grape_F(75,91,350,220,GRAVITY)
+        self.grape_setting = model_theforest.Grape_F(75,91,350,253,GRAVITY)
         self.grape_sprite = sprite_theforest.Sprite_F("images/grape.png",self.grape_setting)
     def on_mouse_motion(self, x, y, dx, dy):
         #print("(x,y) = ("+str(x)+","+str(y)+")")
