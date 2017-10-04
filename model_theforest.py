@@ -55,7 +55,9 @@ class Slingshot_F(Model_F):
         self.mouse_hold = mouse_hold
         self.mouse_x = mouse_x
         self.mouse_y = mouse_y
-    def getAngle(self):
+    def getAngle_radian(self):
         return math.atan2(self.shoot_y-self.mouse_y ,self.shoot_x-self.mouse_x)
+    def getAngle_degree(self):
+        return (math.atan2(self.shoot_y-self.mouse_y ,self.shoot_x-self.mouse_x)*180)/math.pi
     def getVelocity(self):
         return math.sqrt(math.pow(self.shoot_y-self.mouse_y ,2) + math.pow(self.shoot_x-self.mouse_x,2))/12
