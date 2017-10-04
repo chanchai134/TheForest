@@ -13,16 +13,16 @@ class GameWindow(arcade.Window):
         self.mouse_hold = None
         self.mouse_x = None
         self.mouse_y = None
-        self.slingshot_setting = model_theforest.Slingshot_F(80,182,350,150,-3,66)
+        self.slingshot_setting = model_theforest.Slingshot_F(80,182,350,150,0,70)
         self.slingshot_sprite = sprite_theforest.Slingshot_sprite("images/slingshot.png",self.slingshot_setting)
-        self.grape_setting = model_theforest.Grape_F(68,91,100,300,6,GRAVITY,45)
+        self.grape_setting = model_theforest.Grape_F(75,91,350,220,6,GRAVITY,45)
         self.grape_sprite = sprite_theforest.Sprite_F("images/grape.png",self.grape_setting)
     def on_mouse_motion(self, x, y, dx, dy):
         #print("(x,y) = ("+str(x)+","+str(y)+")")
         self.mouse_x = x
         self.mouse_y = y
     def on_mouse_press(self, x, y, button, modifiers):
-        #print("(x,y) = ("+str(x)+","+str(y)+")")
+        print("(x,y) = ("+str(x)+","+str(y)+")")
         if button == arcade.MOUSE_BUTTON_LEFT:
             self.mouse_hold = True
     def on_mouse_release(self, x, y, button,modifiers):
@@ -31,9 +31,14 @@ class GameWindow(arcade.Window):
             self.mouse_hold = False
     def on_draw(self):
         arcade.start_render()
-        self.grape_sprite.draw()
+        self.slingshot_sprite.draw_line_R(self.slingshot_setting.mouse_hold,
+                                        self.slingshot_setting.shoot_x, 
+                                        self.slingshot_setting.shoot_y, 
+                                        self.slingshot_setting.mouse_x, 
+                                        self.slingshot_setting.mouse_y)
         self.slingshot_sprite.draw()
-        self.slingshot_sprite.draw_line(self.slingshot_setting.mouse_hold,
+        self.grape_sprite.draw()
+        self.slingshot_sprite.draw_line_L(self.slingshot_setting.mouse_hold,
                                         self.slingshot_setting.shoot_x, 
                                         self.slingshot_setting.shoot_y, 
                                         self.slingshot_setting.mouse_x, 

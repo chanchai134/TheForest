@@ -9,9 +9,13 @@ class Sprite_F(arcade.Sprite):
         self.set_position(self.model.x, self.model.y)
     def draw(self):
         super().draw()
+
 class Slingshot_sprite(Sprite_F):
     def __init__(self, scr, model_theforest):
         super().__init__(scr, model_theforest)
-    def draw_line(self, open_draw, start_x, start_y, end_x, end_y):
+    def draw_line_R(self, open_draw, shoot_x, shoot_y, end_x, end_y):
         if open_draw:
-            arcade.draw_line(start_x, start_y, end_x, end_y, ROPE_COLOR, 4)
+            arcade.draw_line(shoot_x + 21, shoot_y -3 , end_x, end_y, ROPE_COLOR, 5)
+    def draw_line_L(self, open_draw, shoot_x, shoot_y, end_x, end_y):
+        if open_draw:
+            arcade.draw_line(shoot_x -38 , shoot_y -13 , end_x, end_y, ROPE_COLOR, 5)
