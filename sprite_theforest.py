@@ -1,4 +1,5 @@
 import arcade
+ROPE_COLOR = (217,180,138)
 class Sprite_F(arcade.Sprite):
     def __init__(self, scr, model_theforest):
         super().__init__(scr)
@@ -11,14 +12,6 @@ class Sprite_F(arcade.Sprite):
 class Slingshot_sprite(Sprite_F):
     def __init__(self, scr, model_theforest):
         super().__init__(scr, model_theforest)
-        self.mouse_hold = None
-        self.mouse_x = None
-        self.mouse_y = None
-    def updateMouse(self ,mouse_x, mouse_y, mouse_hold):
-        self.mouse_hold = mouse_x
-        self.mouse_x = mouse_y
-        self.mouse_y = mouse_hold
-    def update(self):
-        super().update()
-    def draw(self):
-        super().draw()
+    def draw_line(self, open_draw, start_x, start_y, end_x, end_y):
+        if open_draw:
+            arcade.draw_line(start_x, start_y, end_x, end_y, ROPE_COLOR, 4)

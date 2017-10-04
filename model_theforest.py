@@ -27,6 +27,15 @@ class Grape_F(Shoot_F):
         super().__init__(width, height, x, y, velocity, gravity, angle)
 
 class Slingshot_F(Model_F):
-    def __init__(self, width, height, x, y):
+    def __init__(self, width, height, x, y, shoot_x_shiff, shoot_y_shiff):
         super().__init__(width, height, x, y)
+        self.shoot_x = self.x + shoot_x_shiff
+        self.shoot_y = self.y + shoot_y_shiff
+        self.mouse_hold = None
+        self.mouse_x = None
+        self.mouse_y = None
+    def updateMouse(self ,mouse_x, mouse_y, mouse_hold):
+        self.mouse_hold = mouse_hold
+        self.mouse_x = mouse_x
+        self.mouse_y = mouse_y
             
