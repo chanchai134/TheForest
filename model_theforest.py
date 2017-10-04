@@ -1,5 +1,8 @@
 import math
-class Model_F:
+
+GRAVITY = 0.35
+
+class Model_config:
     def __init__(self, width, height, x, y):
         self.width = width
         self.height = height
@@ -8,12 +11,12 @@ class Model_F:
         self.x = x
         self.y = y
 
-class Shoot_F(Model_F):
+class Shoot_config(Model_config):
     def __init__(self, width, height, x, y, gravity):
         super().__init__(width, height, x, y)
         self.gravity = (-1)*gravity
         self.angle = None
-        self.velocity_x = None
+        self.velocity_x = None #enable setup_shoot method
         self.velocity_y_pre = None
         self.velocity_y_post = None
         self.shiff_distance_y = None
@@ -31,23 +34,23 @@ class Shoot_F(Model_F):
         self.x += self.velocity_x
         self.y += self.shiff_distance_y
     def isOutScreen(self, screen_width, screen_height):
-        if self.x > screen_width or self.x < 0 or self.y > screen_height or self.y <0 :
+        if self.x > screen_width or self.x < 0 or self.y > screen_height or self.y < 0 :
             self.x = self.start_x
             self.y = self.start_y
-            self.velocity_x = None
+            self.velocity_x = None #enable setup_shoot method
             return True
         return False
 
-class Grape_F(Shoot_F):
-    def __init__(self, width, height, x, y, gravity):
-        super().__init__(width, height, x, y, gravity)
+class Grape_config(Shoot_config):
+    def __init__(self, ModelReference):
+        super().__init__(75, 91, ModelReference.shoot_x, ModelReference.shoot_y, GRAVITY)
     
 
-class Slingshot_F(Model_F):
-    def __init__(self, width, height, x, y, shoot_x_shiff, shoot_y_shiff):
-        super().__init__(width, height, x, y)
-        self.shoot_x = self.x + shoot_x_shiff
-        self.shoot_y = self.y + shoot_y_shiff
+class Slingshot_config(Model_config):
+    def __init__(self, x, y):
+        super().__init__(80, 248, x, y)
+        self.shoot_x = self.x
+        self.shoot_y = self.y + 103
         self.mouse_hold = None
         self.mouse_x = None
         self.mouse_y = None

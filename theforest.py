@@ -1,10 +1,9 @@
 import arcade
-import model_theforest
-import sprite_theforest
+from model_theforest import Grape_config, Slingshot_config
+from sprite_theforest import Grape_sprite, Slingshot_sprite, SlingshotHand_sprite
 
 SCREEN_WIDTH = 1700
 SCREEN_HEIGHT = 700
-GRAVITY = 0.35
 
 class GameWindow(arcade.Window):
     def __init__(self, width, height,title):
@@ -15,13 +14,12 @@ class GameWindow(arcade.Window):
         self.mouse_y = 0
         self.shoot_enable = None
         self.mouse_enable = True
-        self.slingshot_setting = model_theforest.Slingshot_F(80,248,350,150,0,103)
-        self.slingshot_sprite = sprite_theforest.Slingshot_sprite("images/slingshot.png",self.slingshot_setting)
-        self.hand_sprite = sprite_theforest.Hand_sprite("images/hand.png",self.slingshot_setting)
-        self.grape_setting = model_theforest.Grape_F(75,91,350,253,GRAVITY)
-        self.grape_sprite = sprite_theforest.Sprite_F("images/grape.png",self.grape_setting)
+        self.slingshot_C = Slingshot_config(350,150)
+        self.slingshot_S = Slingshot_sprite(self.slingshot_C)
+        self.slingshotHand_S = SlingshotHand_sprite(self.slingshot_C)
+        self.grape_C = Grape_config(self.slingshot_C)
+        self.grape_S = Grape_sprite(self.grape_C)
     def on_mouse_motion(self, x, y, dx, dy):
-        #print("(x,y) = ("+str(x)+","+str(y)+")")
         self.mouse_x = x
         self.mouse_y = y
     def on_mouse_press(self, x, y, button, modifiers):
@@ -29,43 +27,33 @@ class GameWindow(arcade.Window):
         if button == arcade.MOUSE_BUTTON_LEFT:
             self.mouse_hold = True
     def on_mouse_release(self, x, y, button,modifiers):
-        #print("(x,y) = ("+str(x)+","+str(y)+")")
         if button == arcade.MOUSE_BUTTON_LEFT:
             self.mouse_hold = False
             self.shoot_enable = True
     def on_draw(self):
         arcade.start_render()
         if self.mouse_enable:
-            self.slingshot_sprite.draw_line_R(self.slingshot_setting.mouse_hold,
-                                            self.slingshot_setting.shoot_x, 
-                                            self.slingshot_setting.shoot_y, 
-                                            self.slingshot_setting.mouse_x, 
-                                            self.slingshot_setting.mouse_y)
-        self.slingshot_sprite.draw()
-        self.grape_sprite.draw()
+            self.slingshot_S.draw_line_R()
+        self.slingshot_S.draw()
+        self.grape_S.draw()
         if self.mouse_enable:
-            self.slingshot_sprite.draw_line_L(self.slingshot_setting.mouse_hold,
-                                            self.slingshot_setting.shoot_x, 
-                                            self.slingshot_setting.shoot_y, 
-                                            self.slingshot_setting.mouse_x, 
-                                            self.slingshot_setting.mouse_y)
-        self.hand_sprite.draw()
+            self.slingshot_S.draw_line_L()
+        self.slingshotHand_S.draw()
     def update(self, delta_time):
-        #print(self.mouse_hold)
-        #print("(x,y) = ("+str(self.grape_setting.x)+","+str(self.grape_setting.y)+")")
-        if self.slingshot_setting.mouse_hold:
-            self.grape_setting.x = self.slingshot_setting.mouse_x
-            self.grape_setting.y = self.slingshot_setting.mouse_y
+        #print("(x,y) = ("+str(self.grape_C.x)+","+str(self.grape_C.y)+")")
+        if self.slingshot_C.mouse_hold:
+            self.grape_C.x = self.slingshot_C.mouse_x
+            self.grape_C.y = self.slingshot_C.mouse_y
         if self.shoot_enable:
-            self.grape_setting.setup_shoot(self.slingshot_setting.getVelocity(),self.slingshot_setting.getAngle_radian())
-            self.grape_setting.shoot()
+            self.grape_C.setup_shoot(self.slingshot_C.getVelocity(),self.slingshot_C.getAngle_radian())
+            self.grape_C.shoot()
             self.mouse_enable = False
-        self.grape_sprite.update()
-        self.slingshot_sprite.update()
-        self.slingshot_setting.updateMouse(self.mouse_x, self.mouse_y, self.mouse_hold)
-        self.hand_sprite.update()
+        self.grape_S.update()
+        self.slingshot_S.update()
+        self.slingshot_C.updateMouse(self.mouse_x, self.mouse_y, self.mouse_hold)
+        self.slingshotHand_S.update()
         ''' Out Screen Edge '''
-        if self.grape_setting.isOutScreen(SCREEN_WIDTH,SCREEN_HEIGHT):
+        if self.grape_C.isOutScreen(SCREEN_WIDTH,SCREEN_HEIGHT):
             self.shoot_enable = False
             self.mouse_enable = True
            
