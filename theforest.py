@@ -13,9 +13,10 @@ class GameWindow(arcade.Window):
         self.mouse_hold = None
         self.mouse_x = None
         self.mouse_y = None
+        self.shoot_enable = None
         self.slingshot_setting = model_theforest.Slingshot_F(80,182,350,150,0,70)
         self.slingshot_sprite = sprite_theforest.Slingshot_sprite("images/slingshot.png",self.slingshot_setting)
-        self.grape_setting = model_theforest.Grape_F(75,91,350,220,6,GRAVITY,45)
+        self.grape_setting = model_theforest.Grape_F(75,91,350,220,GRAVITY)
         self.grape_sprite = sprite_theforest.Sprite_F("images/grape.png",self.grape_setting)
     def on_mouse_motion(self, x, y, dx, dy):
         #print("(x,y) = ("+str(x)+","+str(y)+")")
@@ -29,6 +30,7 @@ class GameWindow(arcade.Window):
         #print("(x,y) = ("+str(x)+","+str(y)+")")
         if button == arcade.MOUSE_BUTTON_LEFT:
             self.mouse_hold = False
+            self.shoot_enable = True
     def on_draw(self):
         arcade.start_render()
         self.slingshot_sprite.draw_line_R(self.slingshot_setting.mouse_hold,
@@ -45,7 +47,10 @@ class GameWindow(arcade.Window):
                                         self.slingshot_setting.mouse_y)
     def update(self, delta_time):
         #print(self.mouse_hold)
-        self.grape_setting.shoot()
+        print("(x,y) = ("+str(self.grape_setting.x)+","+str(self.grape_setting.y)+")")
+        if self.shoot_enable:
+            self.grape_setting.setup_shoot(6,self.slingshot_setting.getAngle())
+            self.grape_setting.shoot()
         self.grape_sprite.update()
         self.slingshot_sprite.update()
         self.slingshot_setting.updateMouse(self.mouse_x, self.mouse_y, self.mouse_hold)
