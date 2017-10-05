@@ -11,21 +11,36 @@ class Model_config:
         self.x = x
         self.y = y
 
-class Shoot_config(Model_config):
-    def __init__(self, width, height, x, y, gravity):
-        super().__init__(width, height, x, y)
-        self.gravity = (-1)*gravity
+class Slingshot_config(Model_config):
+    def __init__(self, x, y, mouse):
+        super().__init__(80, 248, x, y)
+        self.shoot_x = self.x
+        self.shoot_y = self.y + 103
+        self.mouse = mouse
+    def getAngle_radian(self):
+        return math.atan2(self.shoot_y-self.mouse.y ,self.shoot_x-self.mouse.x)
+    def getAngle_degree(self):
+        return (math.atan2(self.shoot_y-self.mouse.y ,self.shoot_x-self.mouse.x)*180)/math.pi
+    def getVelocity(self):
+        return math.sqrt(math.pow(self.shoot_y-self.mouse.y ,2) + math.pow(self.shoot_x-self.mouse.x,2))/12
+
+class Shoot_config(Model_config): #all sprite that can shoot
+    def __init__(self, width, height, Slingshot):
+        super().__init__(width, height, Slingshot.shoot_x, Slingshot.shoot_y)
+        self.gravity = (-1)*GRAVITY
         self.angle = None
-        self.velocity_x = None #enable setup_shoot method
+        self.velocity_x = None
         self.velocity_y_pre = None
         self.velocity_y_post = None
         self.shiff_distance_y = None
-    def setup_shoot(self, velocity, angle):
-        if self.velocity_x == None:
-            self.angle = angle
-            self.velocity_x = velocity*math.cos(self.angle)
-            self.velocity_y_pre = velocity*math.sin(self.angle)
-            self.velocity_y_post = velocity*math.sin(self.angle) + self.gravity
+        self.slingshot = Slingshot
+    def aim(self):
+        self.x = self.slingshot.mouse.x
+        self.y = self.slingshot.mouse.y
+        self.angle = self.slingshot.getAngle_radian()
+        self.velocity_x = self.slingshot.getVelocity()*math.cos(self.angle)
+        self.velocity_y_pre = self.slingshot.getVelocity()*math.sin(self.angle)
+        self.velocity_y_post = self.slingshot.getVelocity()*math.sin(self.angle) + self.gravity
     def shoot(self):
         self.shiff_distance_y = math.pow(self.velocity_y_post,2)-math.pow(self.velocity_y_pre,2)
         self.shiff_distance_y /= 2*self.gravity
@@ -33,34 +48,12 @@ class Shoot_config(Model_config):
         self.velocity_y_post += self.gravity
         self.x += self.velocity_x
         self.y += self.shiff_distance_y
-    def isOutScreen(self, screen_width, screen_height):
-        if self.x > screen_width or self.x < 0 or self.y > screen_height or self.y < 0 :
+    def sprite_ResetOnoutScreen(self, screen_width, screen_height):
+        if self.x > screen_width or self.x < 0 or self.y > screen_height or self.y < 0:
+            self.slingshot.mouse.reset_mouse()
             self.x = self.start_x
             self.y = self.start_y
-            self.velocity_x = None #enable setup_shoot method
-            return True
-        return False
 
 class Grape_config(Shoot_config):
-    def __init__(self, ModelReference):
-        super().__init__(75, 91, ModelReference.shoot_x, ModelReference.shoot_y, GRAVITY)
-    
-
-class Slingshot_config(Model_config):
-    def __init__(self, x, y):
-        super().__init__(80, 248, x, y)
-        self.shoot_x = self.x
-        self.shoot_y = self.y + 103
-        self.mouse_hold = None
-        self.mouse_x = None
-        self.mouse_y = None
-    def updateMouse(self ,mouse_x, mouse_y, mouse_hold):
-        self.mouse_hold = mouse_hold
-        self.mouse_x = mouse_x
-        self.mouse_y = mouse_y
-    def getAngle_radian(self):
-        return math.atan2(self.shoot_y-self.mouse_y ,self.shoot_x-self.mouse_x)
-    def getAngle_degree(self):
-        return (math.atan2(self.shoot_y-self.mouse_y ,self.shoot_x-self.mouse_x)*180)/math.pi
-    def getVelocity(self):
-        return math.sqrt(math.pow(self.shoot_y-self.mouse_y ,2) + math.pow(self.shoot_x-self.mouse_x,2))/12
+    def __init__(self, Slingshot):
+        super().__init__(75, 91, Slingshot)
