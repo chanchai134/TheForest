@@ -24,11 +24,11 @@ class GameWindow(arcade.Window):
         circular_equation = (x - self.grape_C.centerX)**2
         circular_equation += (y - self.grape_C.centerY)**2
         if circular_equation <=  self.grape_C.caught_radian**2: # r^2
-            print("inside")
+            #print("inside")
             self.mouse.canCaught = True
         else:
             self.mouse.canCaught = False
-            print("outinside")
+            #print("outinside")
     def on_mouse_press(self, x, y, button, modifiers):
         #print("(x,y) = ("+str(x)+","+str(y)+")")
         if button == arcade.MOUSE_BUTTON_LEFT and (not self.mouse.shooting) and self.mouse.canCaught:
@@ -48,15 +48,15 @@ class GameWindow(arcade.Window):
         self.slingshot_S.draw_line_L()
         self.slingshotHand_S.draw()
         '''__debug__'''
-        self.grape_C.debug()
-        self.worm_C.debug()
+        #self.grape_C.debug()
+        #self.worm_C.debug()
     def update(self, delta_time):
         if self.mouse.aimming:
             self.grape_C.aim()
         if self.mouse.shooting:
             self.grape_C.shoot()
         if self.worm_C.isHit(self.grape_C):
-            print("Hit")
+            #print("Hit")
             self.worm_C.update_random(SCREEN_WIDTH,SCREEN_HEIGHT)
             self.grape_C.ResetPosition()
         '''__Auto function__'''
