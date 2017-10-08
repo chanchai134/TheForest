@@ -1,23 +1,25 @@
 import arcade
-from model_theforest import Worm_config, Grape_config, Slingshot_config
-from sprite_theforest import Worm_sprite, Grape_sprite, Slingshot_sprite, SlingshotHand_sprite
+from model_theforest import Worm_config, Monkey_config, Dragon_config, Grape_config, Slingshot_config
+from sprite_theforest import Worm_sprite, Monkey_sprite, Dragon_sprite, Grape_sprite, Slingshot_sprite, SlingshotHand_sprite
 from setting_theforest import Mouse_C
+from map_theforest import Map_F
 
-SCREEN_WIDTH = 1700
-SCREEN_HEIGHT = 700
+SCREEN_WIDTH = 1910
+SCREEN_HEIGHT = 900
 
 class GameWindow(arcade.Window):
     def __init__(self, width, height,title):
         super().__init__(width, height,title)
         arcade.set_background_color(arcade.color.WHITE_SMOKE)
         self.mouse = Mouse_C()
-        self.slingshot_C = Slingshot_config(SCREEN_WIDTH/2, SCREEN_HEIGHT/2, self.mouse)
+        self.slingshot_C = Slingshot_config(327, 400, self.mouse)
         self.slingshot_S = Slingshot_sprite(self.slingshot_C)
         self.slingshotHand_S = SlingshotHand_sprite(self.slingshot_C)
         self.grape_C = Grape_config(self.slingshot_C)
         self.grape_S = Grape_sprite(self.grape_C)
         self.worm_C = Worm_config(1410, 130)
         self.worm_S = Worm_sprite(self.worm_C)
+        self.map = Map_F(SCREEN_WIDTH, SCREEN_HEIGHT)
     def on_mouse_motion(self, x, y, dx, dy):
         self.mouse.x = x
         self.mouse.y = y
@@ -39,18 +41,22 @@ class GameWindow(arcade.Window):
             self.mouse.aimming = False
     def on_draw(self):
         arcade.start_render()
-        '''__world part__'''
-        self.worm_S.draw()
         '''__shoot part__'''
         self.slingshot_S.draw_line_R()
         self.slingshot_S.draw()
         self.grape_S.draw()
         self.slingshot_S.draw_line_L()
         self.slingshotHand_S.draw()
-        '''__debug__'''
-        #self.grape_C.debug()
-        #self.worm_C.debug()
+        '''__Map part__'''
+        self.map.draw()
+        self.worm_S.draw()
+        '''__Debug__'''
+        self.grape_C.debug()
+        self.worm_C.debug()
     def update(self, delta_time):
+        '''__Map part__'''
+        self.map.update()
+        '''__Control part__'''
         if self.mouse.aimming:
             self.grape_C.aim()
         if self.mouse.shooting:

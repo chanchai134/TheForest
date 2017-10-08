@@ -12,14 +12,6 @@ class Sprite_sprite(arcade.Sprite):
     def draw(self):
         super().draw()
 
-class Grape_sprite(Sprite_sprite):
-    def __init__(self, model_theforest):
-        super().__init__("images/grape.png", model_theforest)
-
-class Worm_sprite(Sprite_sprite):
-    def __init__(self, model_theforest):
-        super().__init__("images/worm.png", model_theforest)
-
 class Slingshot_sprite(Sprite_sprite):
     def __init__(self, model_theforest):
         super().__init__("images/slingshot.png", model_theforest)
@@ -50,3 +42,31 @@ class SlingshotHand_sprite(Sprite_sprite):
     def draw(self):
         if self.model.mouse.aimming :
             super().draw()
+
+class Grape_sprite(Sprite_sprite):
+    def __init__(self, model_theforest):
+        super().__init__("images/grape.png", model_theforest)
+
+class Worm_sprite(Sprite_sprite):
+    def __init__(self, model_theforest):
+        super().__init__("images/worm.png", model_theforest)
+
+class Monkey_sprite(Sprite_sprite):
+    def __init__(self, model_theforest):
+        super().__init__("images/monkey.png", model_theforest)
+
+class Dragon_sprite(Sprite_sprite):
+    def __init__(self, model_theforest):
+        super().__init__("images/dragon.png", model_theforest)
+
+class Shoothill_sprite(Sprite_sprite):
+    def __init__(self, model_theforest):
+        super().__init__("images/shoothill.png", model_theforest)
+
+class Ground_sprite(Sprite_sprite):
+    def __init__(self, model_theforest):
+        super().__init__("images/ground.png", model_theforest)
+
+class Grass_sprite(Sprite_sprite):
+    def __init__(self, model_theforest):
+        super().__init__("images/grass.png", model_theforest)

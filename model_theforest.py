@@ -5,9 +5,7 @@ from random import randint
 GRAVITY = 0.35
 
 class Model_config:
-    def __init__(self, width, height, x, y):
-        self.width = width
-        self.height = height
+    def __init__(self, x, y):
         self.start_x = x
         self.start_y = y
         self.x = x
@@ -15,7 +13,7 @@ class Model_config:
 
 class Slingshot_config(Model_config):
     def __init__(self, x, y, mouse):
-        super().__init__(80, 248, x, y)
+        super().__init__(x, y)
         self.shoot_x = self.x
         self.shoot_y = self.y + 103
         self.mouse = mouse
@@ -27,8 +25,8 @@ class Slingshot_config(Model_config):
         return math.sqrt(math.pow(self.shoot_y-self.mouse.y ,2) + math.pow(self.shoot_x-self.mouse.x,2))/12
 
 class Shoot_config(Model_config): #all sprite that can shoot
-    def __init__(self, width, height, Slingshot, caught_radian, ate_radian, centerMarginX, centerMarginY):
-        super().__init__(width, height, Slingshot.shoot_x, Slingshot.shoot_y)
+    def __init__(self, Slingshot, caught_radian, ate_radian, centerMarginX, centerMarginY):
+        super().__init__(Slingshot.shoot_x, Slingshot.shoot_y)
         self.gravity = (-1)*GRAVITY
         self.angle = None
         self.velocity_x = None
@@ -78,11 +76,11 @@ class Shoot_config(Model_config): #all sprite that can shoot
 
 class Grape_config(Shoot_config):
     def __init__(self, Slingshot):
-        super().__init__(75, 91, Slingshot, 35, 25, 0 ,-10)
+        super().__init__(Slingshot, 35, 25, 0 ,-10)
 
 class Eat_config(Model_config):
-    def __init__(self, width, height, x, y, eat_radian, centerMarginX, centerMarginY):
-        super().__init__(width, height, x, y)
+    def __init__(self, x, y, eat_radian, centerMarginX, centerMarginY):
+        super().__init__(x, y)
         self.centerMarginX = centerMarginX
         self.centerMarginY = centerMarginY
         self.centerX = x + self.centerMarginX
@@ -106,4 +104,25 @@ class Eat_config(Model_config):
 
 class Worm_config(Eat_config):
     def __init__(self, x, y):
-        super().__init__(120, 140, x, y, 40, -25, 0)
+        super().__init__(x, y, 30, -20, 0)
+
+class Monkey_config(Eat_config):
+    def __init__(self, x, y):
+        super().__init__(x, y, 40, -10, 20)
+
+class Dragon_config(Eat_config):
+    def __init__(self, x, y):
+        super().__init__(x, y, 60, -68, -50)
+
+class Shoothill_config(Model_config):
+    def __init__(self, x, y):
+        super().__init__(x, y)
+
+class Ground_config(Model_config):
+    def __init__(self, x, y):
+        super().__init__(x, y)
+
+class Grass_config(Model_config):
+    def __init__(self, x, y):
+        super().__init__(x, y)
+    
