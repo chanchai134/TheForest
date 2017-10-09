@@ -1,5 +1,5 @@
-from model_theforest import Shoothill_config, Ground_config, Grass_config
-from sprite_theforest import Shoothill_sprite, Ground_sprite, Grass_sprite
+from model_theforest import Shoothill_config, Ground_config, Grass_config, Worm_config, Monkey_config, Dragon_config
+from sprite_theforest import Shoothill_sprite, Ground_sprite, Grass_sprite, Worm_sprite, Monkey_sprite, Dragon_sprite
 from random import randint
 
 RANGE_SPAW = 8
@@ -17,6 +17,8 @@ class Map_F:
         self.mapFixBox_S = []
         self.mapRandom_C = []
         self.mapRandom_S = []
+        self.animal_C = []
+        self.animal_S = []
         '''__Map Generator__'''
         start_x = 533
         ground_x = [start_x]
@@ -55,18 +57,62 @@ class Map_F:
                 self.mapRandom_C.append(Ground_config(x2, self.Ylevel(i)))
                 self.mapRandom_S.append(Ground_sprite(self.mapRandom_C[-1]))
                 self.mapRandom_S.append(Ground_sprite(self.mapRandom_C[-2]))
+        #Generate Monster
+        i = 0
+        while i < len(self.ground_Random):
+            y = self.Ylevel(self.height_Random[self.ground_Random[i]])
+            yN = 0
+            xCenter = (self.ground_Random[i][0] + self.ground_Random[i][1])/2
+            if i != len(self.ground_Random)-1:
+                yN = self.Ylevel(self.height_Random[self.ground_Random[i+1]])
+            if y == yN :
+                animal_No = randint(1,3)
+                if animal_No != 3:
+                    animal_No = randint(1,3)
+                if animal_No == 1:
+                    xCenter = (self.ground_Random[i][0] + self.ground_Random[i][1])/2
+                    self.animal_C.append(Worm_config(xCenter, y + 90))   
+                    self.animal_S.append(Worm_sprite(self.animal_C[-1]))
+                    i += 1
+                elif animal_No == 2:
+                    xCenter = (self.ground_Random[i][0] + self.ground_Random[i][1])/2
+                    self.animal_C.append(Monkey_config(xCenter, y + 100))   
+                    self.animal_S.append(Monkey_sprite(self.animal_C[-1]))
+                    i += 1
+                else :
+                    xCenter = (self.ground_Random[i][1] + self.ground_Random[i+1][0])/2
+                    self.animal_C.append(Dragon_config(xCenter, y + 150))   
+                    self.animal_S.append(Dragon_sprite(self.animal_C[-1]))
+                    i += 2
+            else :
+                animal_No = randint(1,2)
+                xCenter = (self.ground_Random[i][0] + self.ground_Random[i][1])/2
+                if animal_No == 1:
+                    self.animal_C.append(Worm_config(xCenter, y + 90))   
+                    self.animal_S.append(Worm_sprite(self.animal_C[-1]))
+                elif animal_No == 2:
+                    self.animal_C.append(Monkey_config(xCenter, y + 100))   
+                    self.animal_S.append(Monkey_sprite(self.animal_C[-1]))
+                i += 1
     def draw(self):
         self.shoothill_S.draw()
         for hill in self.mapRandom_S:
             hill.draw()
         for box in self.mapFixBox_S:
             box.draw()
+        for animal in self.animal_S:
+            animal.draw()
+        '''__Debug__'''
+        for animal in self.animal_C:
+            animal.debug()
     def update(self):
         self.shoothill_S.update()
         for hill in self.mapRandom_S:
             hill.update()
         for box in self.mapFixBox_S:
             box.update()
+        for animal in self.animal_S:
+            animal.update()
     def Ylevel(self, y):
         return 107 + (71*y)
     def YGrass(self, y):
@@ -76,5 +122,3 @@ class Map_F:
             if self.height_Random[self.ground_Random[i]] == self.height_Random[self.ground_Random[i-1]]:
                 return True
         return False
-
-        

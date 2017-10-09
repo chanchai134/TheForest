@@ -68,7 +68,7 @@ class Shoot_config(Model_config): #all sprite that can shoot
         self.centerX = self.start_centerX
         self.centerY = self.start_centerY
     def sprite_ResetOnoutScreen(self, screen_width, screen_height):
-        if self.x > screen_width or self.x < 0 or self.y > screen_height or self.y < 0:
+        if self.x > screen_width or self.x < 0 or self.y < 0:
             self.ResetPosition()
     def debug(self):
         arcade.draw_circle_outline(self.centerX, self.centerY, self.caught_radian, arcade.color.BLACK)
@@ -124,5 +124,4 @@ class Ground_config(Model_config):
 
 class Grass_config(Model_config):
     def __init__(self, x, y):
-        super().__init__(x, y)
-    
+        super().__init__(x, y)    
