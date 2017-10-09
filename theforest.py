@@ -1,6 +1,6 @@
 import arcade
-from model_theforest import Worm_config, Monkey_config, Dragon_config, Grape_config, Slingshot_config
-from sprite_theforest import Worm_sprite, Monkey_sprite, Dragon_sprite, Grape_sprite, Slingshot_sprite, SlingshotHand_sprite
+from model_theforest import Grape_config, Slingshot_config
+from sprite_theforest import Grape_sprite, Slingshot_sprite, SlingshotHand_sprite
 from setting_theforest import Mouse_C
 from map_theforest import Map_F
 
@@ -17,9 +17,7 @@ class GameWindow(arcade.Window):
         self.slingshotHand_S = SlingshotHand_sprite(self.slingshot_C)
         self.grape_C = Grape_config(self.slingshot_C)
         self.grape_S = Grape_sprite(self.grape_C)
-        self.worm_C = Worm_config(1410, 130)
-        self.worm_S = Worm_sprite(self.worm_C)
-        self.map = Map_F(SCREEN_WIDTH, SCREEN_HEIGHT)
+        self.map = Map_F(SCREEN_WIDTH, SCREEN_HEIGHT, self.grape_C)
     def on_mouse_motion(self, x, y, dx, dy):
         self.mouse.x = x
         self.mouse.y = y
@@ -49,10 +47,8 @@ class GameWindow(arcade.Window):
         self.slingshotHand_S.draw()
         '''__Map part__'''
         self.map.draw()
-        self.worm_S.draw()
         '''__Debug__'''
         self.grape_C.debug()
-        self.worm_C.debug()
     def update(self, delta_time):
         '''__Map part__'''
         self.map.update()
@@ -61,15 +57,10 @@ class GameWindow(arcade.Window):
             self.grape_C.aim()
         if self.mouse.shooting:
             self.grape_C.shoot()
-        if self.worm_C.isHit(self.grape_C):
-            #print("Hit")
-            self.worm_C.update_random(SCREEN_WIDTH,SCREEN_HEIGHT)
-            self.grape_C.ResetPosition()
         '''__Auto function__'''
         self.grape_C.sprite_ResetOnoutScreen(SCREEN_WIDTH,SCREEN_HEIGHT)
         #print("(x,y) = ("+str(self.grape_C.x)+","+str(self.grape_C.y)+")")
         '''__Sprite update__'''
-        self.worm_S.update()
         self.slingshot_S.update()
         self.slingshotHand_S.update()
         self.grape_S.update()
