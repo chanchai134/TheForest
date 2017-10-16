@@ -121,7 +121,31 @@ class Shoothill_config(Model_config):
 class Ground_config(Model_config):
     def __init__(self, x, y):
         super().__init__(x, y)
+    def isHit(self, model):
+        X_equation = self.x-35
+        temp = (model.caught_radian - X_equation + model.centerX)*(model.caught_radian + X_equation - model.centerX)
+        if temp > 0:
+            y1 = math.sqrt(temp) + model.centerY
+            y2 = ((-1)*math.sqrt(temp)) + model.centerY
+            if (y1 > (self.y-35) and y1 < (self.y+35)) or (y2 > (self.y-35) and y2 < (self.y+35)):
+                return True    
 
 class Grass_config(Model_config):
     def __init__(self, x, y):
-        super().__init__(x, y)    
+        super().__init__(x, y)
+    def isHit(self, model):
+        X_equation = self.x-35
+        temp = (model.caught_radian - X_equation + model.centerX)*(model.caught_radian + X_equation - model.centerX)
+        if temp > 0:
+            y1 = math.sqrt(temp) + model.centerY
+            y2 = ((-1)*math.sqrt(temp)) + model.centerY
+            if (y1 > (self.y-35) and y1 < (self.y+35)) or (y2 > (self.y-35) and y2 < (self.y+35)):
+                return True
+        Y_equation = self.y+35
+        temp = (model.caught_radian - Y_equation + model.centerY)*(model.caught_radian + Y_equation - model.centerY)
+        if temp > 0:
+            x1 = math.sqrt(temp) + model.centerX
+            x2 = ((-1)*math.sqrt(temp)) + model.centerX
+            if (x1 > (self.x-35) and x1 < (self.x+35)) or (x2 > (self.x-35) and x2 < (self.x+35)):
+                return True
+        return False  

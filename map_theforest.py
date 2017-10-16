@@ -121,7 +121,13 @@ class Map_F:
             if animal.model.isHit(self.fruit):
                 self.animal_C.remove(animal.model)
                 self.animal_S.remove(animal)
-                self.fruit.ResetPosition()4        
+                self.fruit.ResetPosition()     
+        for box in self.mapRandom_C:
+            if box.isHit(self.fruit):
+                self.fruit.ResetPosition()
+        for box in self.mapFixBox_C:
+            if box.isHit(self.fruit):
+                self.fruit.ResetPosition()
     def Ylevel(self, y):
         return 107 + (71*y)
     def YGrass(self, y):

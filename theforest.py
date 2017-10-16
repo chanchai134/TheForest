@@ -8,9 +8,10 @@ SCREEN_WIDTH = 1910
 SCREEN_HEIGHT = 900
 
 class GameWindow(arcade.Window):
-    def __init__(self, width, height,title):
-        super().__init__(width, height,title)
+    def __init__(self, width, height, title):
+        super().__init__(width, height, title)
         arcade.set_background_color(arcade.color.WHITE_SMOKE)
+        self.background = arcade.load_texture("images/bg.jpg")
         self.mouse = Mouse_C()
         self.slingshot_C = Slingshot_config(327, 400, self.mouse)
         self.slingshot_S = Slingshot_sprite(self.slingshot_C)
@@ -39,6 +40,8 @@ class GameWindow(arcade.Window):
             self.mouse.aimming = False
     def on_draw(self):
         arcade.start_render()
+        arcade.draw_texture_rectangle(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2,
+                                      SCREEN_WIDTH, SCREEN_HEIGHT, self.background)
         '''__shoot part__'''
         self.slingshot_S.draw_line_R()
         self.slingshot_S.draw()
