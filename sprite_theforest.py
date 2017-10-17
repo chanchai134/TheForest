@@ -47,6 +47,14 @@ class Grape_sprite(Sprite_sprite):
     def __init__(self, model_theforest):
         super().__init__("images/grape.png", model_theforest)
 
+class Banana_sprite(Sprite_sprite):
+    def __init__(self, model_theforest):
+        super().__init__("images/banana.png", model_theforest)
+
+class Meat_sprite(Sprite_sprite):
+    def __init__(self, model_theforest):
+        super().__init__("images/meat.png", model_theforest)
+
 class Worm_sprite(Sprite_sprite):
     def __init__(self, model_theforest):
         super().__init__("images/worm.png", model_theforest)
