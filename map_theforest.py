@@ -6,7 +6,7 @@ RANGE_SPAW = 8
 MAX_HIGHT_HILL = 5 
 
 class Map_F:
-    def __init__(self, width, height, fruit):
+    def __init__(self, width, height, world):
         self.width = width
         self.height = height
         self.shoothill_C = Shoothill_config(249,141)
@@ -19,7 +19,9 @@ class Map_F:
         self.mapRandom_S = []
         self.animal_C = []
         self.animal_S = []
-        self.fruit = fruit
+        self.fruit = world.fruit_C
+        self.world = world
+        self.score = 0
         '''__Map Generator__'''
         start_x = 533
         ground_x = [start_x]
@@ -106,8 +108,10 @@ class Map_F:
         for animal in self.animal_S:
             animal.draw()
         '''__Debug__'''
+        '''
         for animal in self.animal_C:
             animal.debug()
+        '''
         #print(self.animal_C)
         #print(self.animal_S)
     def update(self):
@@ -121,13 +125,28 @@ class Map_F:
             if animal.model.isHit(self.fruit):
                 self.animal_C.remove(animal.model)
                 self.animal_S.remove(animal)
-                self.fruit.ResetPosition()     
+                self.world.fruit_C = self.world.random_fruit()
+                self.world.fruit_S = self.world.Get_sprite(self.world.fruit_C)
+                self.fruit = self.world.fruit_C     
+                self.world.mouse.reset_mouse()
+                if animal.model.tag == "dragon":
+                    self.score += 90
+                else:
+                    self.score += 50
         for box in self.mapRandom_C:
             if box.isHit(self.fruit):
-                self.fruit.ResetPosition()
+                self.world.fruit_C = self.world.random_fruit()
+                self.world.fruit_S = self.world.Get_sprite(self.world.fruit_C)
+                self.fruit = self.world.fruit_C
+                self.world.mouse.reset_mouse()
+                self.score -= 10
         for box in self.mapFixBox_C:
             if box.isHit(self.fruit):
-                self.fruit.ResetPosition()
+                self.world.fruit_C = self.world.random_fruit()
+                self.world.fruit_S = self.world.Get_sprite(self.world.fruit_C)
+                self.fruit = self.world.fruit_C
+                self.world.mouse.reset_mouse()
+                self.score -= 10 
     def Ylevel(self, y):
         return 107 + (71*y)
     def YGrass(self, y):

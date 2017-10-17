@@ -65,7 +65,8 @@ class Shoot_config(Model_config): #all sprite that can shoot
         self.centerY += self.shiff_distance_y
     def sprite_ResetOnoutScreen(self, screen_width, screen_height):
         if self.x > screen_width or self.x < 0 or self.y < 0:
-            self.ResetPosition()
+            return True
+        return False
     def debug(self):
         arcade.draw_circle_outline(self.centerX, self.centerY, self.caught_radian, arcade.color.BLACK)
         arcade.draw_circle_outline(self.centerX, self.centerY, self.ate_radian, arcade.color.BLACK)
@@ -76,15 +77,8 @@ class Grape_config(Shoot_config):
         self.canSpecial = True
     def special_skill(self):
         self.velocity_x = 0
-        self.velocity_y_pre += 50*self.gravity
-        self.velocity_y_post += 50*self.gravity
-    def ResetPosition(self):
-        self.slingshot.mouse.reset_mouse()
-        self.x = self.start_x
-        self.y = self.start_y
-        self.centerX = self.start_centerX
-        self.centerY = self.start_centerY
-        self.canSpecial = True
+        self.velocity_y_pre += 5*self.gravity
+        self.velocity_y_post += 5*self.gravity
 
 class Banana_config(Shoot_config):
     def __init__(self, Slingshot):
@@ -110,32 +104,10 @@ class Banana_config(Shoot_config):
             self.velocity_y_post = self.freeze_y_post - self.gravity
             self.freeze_is_end = True
             self.canSpecial = False
-    def ResetPosition(self):
-        self.slingshot.mouse.reset_mouse()
-        self.x = self.start_x
-        self.y = self.start_y
-        self.centerX = self.start_centerX
-        self.centerY = self.start_centerY
-        self.canSpecial = True
-        self.clicked = False
-        self.canSpecial = True
-        self.clicked = False
-        self.freeze_y_pre = None
-        self.freeze_y_post = None
-        self.freeze_is_start = False
-        self.freeze_is_end = False
 
 class Meat_config(Shoot_config):
     def __init__(self, Slingshot):
         super().__init__(Slingshot, 45, 35, -3 ,-7, "meat")
-        self.canSpecial = False
-    def ResetPosition(self):
-        self.slingshot.mouse.reset_mouse()
-        self.x = self.start_x
-        self.y = self.start_y
-        self.centerX = self.start_centerX
-        self.centerY = self.start_centerY
-        self.canSpecial = False
 
 class Eat_config(Model_config):
     def __init__(self, x, y, eat_radian, centerMarginX, centerMarginY, tag):
