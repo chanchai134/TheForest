@@ -1,12 +1,13 @@
 import arcade
 
+SCREEN_WIDTH = 1910
+SCREEN_HEIGHT = 900
 ROPE_COLOR = (217,180,138)
 
 class Sprite_sprite(arcade.Sprite):
     def __init__(self, scr, model_theforest):
         super().__init__(scr)
         self.model = model_theforest
-        self.sprite = arcade.Sprite(scr)
     def update(self):
         self.set_position(self.model.x, self.model.y)
     def draw(self):
@@ -78,3 +79,33 @@ class Ground_sprite(Sprite_sprite):
 class Grass_sprite(Sprite_sprite):
     def __init__(self, model_theforest):
         super().__init__("images/grass.png", model_theforest)
+
+class Score_sprite(arcade.Sprite):
+    def __init__(self):
+        super().__init__("images/score.png")
+        self.center_x = SCREEN_WIDTH//2
+        self.center_y = SCREEN_HEIGHT//2
+
+class Win_sprite(arcade.Sprite):
+    def __init__(self):
+        super().__init__("images/win.png")
+        self.center_x = SCREEN_WIDTH//2
+        self.center_y = SCREEN_HEIGHT//2 + 240
+
+class Lose_sprite(arcade.Sprite):
+    def __init__(self):
+        super().__init__("images/lose.png")
+        self.center_x = SCREEN_WIDTH//2
+        self.center_y = SCREEN_HEIGHT//2 + 240
+
+class Click_sprite(arcade.Sprite):
+    def __init__(self):
+        super().__init__("images/click.png")
+        self.center_x = SCREEN_WIDTH//2
+        self.center_y = SCREEN_HEIGHT//2 - 70
+
+class Logo_sprite(arcade.Sprite):
+    def __init__(self):
+        super().__init__("images/theforest.png")
+        self.center_x = SCREEN_WIDTH//2
+        self.center_y = SCREEN_HEIGHT//2 + 250

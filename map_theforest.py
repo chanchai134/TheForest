@@ -1,6 +1,7 @@
 from model_theforest import Shoothill_config, Ground_config, Grass_config, Worm_config, Monkey_config, Dragon_config
 from sprite_theforest import Shoothill_sprite, Ground_sprite, Grass_sprite, Worm_sprite, Monkey_sprite, Dragon_sprite
 from random import randint
+import arcade
 
 RANGE_SPAW = 8
 MAX_HIGHT_HILL = 5 
@@ -22,6 +23,9 @@ class Map_F:
         self.fruit = world.fruit_C
         self.world = world
         self.score = 0
+        self.bonus = 0
+        self.score_text = arcade.create_text("Score : "+str(self.score), arcade.color.BLACK, 50)
+        self.bonus_text = arcade.create_text("Bonus : "+str(self.bonus), arcade.color.BLACK, 50)
         '''__Map Generator__'''
         start_x = 533
         ground_x = [start_x]
@@ -105,8 +109,6 @@ class Map_F:
             hill.draw()
         for box in self.mapFixBox_S:
             box.draw()
-        for animal in self.animal_S:
-            animal.draw()
         '''__Debug__'''
         '''
         for animal in self.animal_C:
@@ -114,6 +116,12 @@ class Map_F:
         '''
         #print(self.animal_C)
         #print(self.animal_S)
+    def draw_animal(self):
+        for animal in self.animal_S:
+            animal.draw()
+    def draw_text(self):
+        arcade.render_text(self.score_text, 1550, 800)
+        arcade.render_text(self.bonus_text, 1550, 720)
     def update(self):
         self.shoothill_S.update()
         for hill in self.mapRandom_S:
@@ -123,16 +131,22 @@ class Map_F:
         for animal in self.animal_S:
             animal.update()
             if animal.model.isHit(self.fruit):
+                if animal.model.tag == "dragon":
+                    self.score += 90
+                else:
+                    self.score += 50
+                if animal.model.tag == "dragon" and self.fruit.tag == "meat":
+                    self.bonus += 10
+                elif animal.model.tag == "monkey" and self.fruit.tag == "banana":
+                    self.bonus += 10
+                elif animal.model.tag == "worm" and self.fruit.tag == "grape":
+                    self.bonus += 10
                 self.animal_C.remove(animal.model)
                 self.animal_S.remove(animal)
                 self.world.fruit_C = self.world.random_fruit()
                 self.world.fruit_S = self.world.Get_sprite(self.world.fruit_C)
                 self.fruit = self.world.fruit_C     
                 self.world.mouse.reset_mouse()
-                if animal.model.tag == "dragon":
-                    self.score += 90
-                else:
-                    self.score += 50
         for box in self.mapRandom_C:
             if box.isHit(self.fruit):
                 self.world.fruit_C = self.world.random_fruit()
@@ -147,6 +161,8 @@ class Map_F:
                 self.fruit = self.world.fruit_C
                 self.world.mouse.reset_mouse()
                 self.score -= 10 
+        self.score_text = arcade.create_text("Score : "+str(self.score), arcade.color.BLACK, 50)
+        self.bonus_text = arcade.create_text("Bonus : "+str(self.bonus), arcade.color.BLACK, 50)
     def Ylevel(self, y):
         return 107 + (71*y)
     def YGrass(self, y):
