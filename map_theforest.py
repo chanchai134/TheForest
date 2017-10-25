@@ -26,8 +26,8 @@ class Map_F:
         self.bonus = 0
         self.score_text = arcade.create_text("Score : "+str(self.score), arcade.color.BLACK, 50)
         self.bonus_text = arcade.create_text("Bonus : "+str(self.bonus), arcade.color.BLACK, 50)
-        self.hint_text = arcade.create_text("Some food have special skill. Let click or hold to try it.", arcade.color.BLACK, 20)
-        self.hint2_text = arcade.create_text("Some food that make animal like will give a bonus.", arcade.color.BLACK, 20)
+        self.hint_text = arcade.create_text("Some food have special skill. Let click or hold to use it.", arcade.color.BLACK, 20)
+        self.hint2_text = arcade.create_text("Some food that animal like will give a bonus.", arcade.color.BLACK, 20)
         '''__Map Generator__'''
         start_x = 533
         ground_x = [start_x]
@@ -118,7 +118,7 @@ class Map_F:
         arcade.render_text(self.score_text, 1550, 800)
         arcade.render_text(self.bonus_text, 1550, 720)
         arcade.render_text(self.hint_text, 685, 60)
-        arcade.render_text(self.hint2_text, 700, 25)
+        arcade.render_text(self.hint2_text, 735, 25)
     def update(self):
         self.shoothill_S.update()
         for hill in self.mapRandom_S:
