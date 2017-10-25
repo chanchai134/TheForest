@@ -111,13 +111,6 @@ class Map_F:
             hill.draw()
         for box in self.mapFixBox_S:
             box.draw()
-        '''__Debug__'''
-        '''
-        for animal in self.animal_C:
-            animal.debug()
-        '''
-        #print(self.animal_C)
-        #print(self.animal_S)
     def draw_animal(self):
         for animal in self.animal_S:
             animal.draw()
@@ -173,6 +166,9 @@ class Map_F:
                 self.score -= 10 
         self.score_text = arcade.create_text("Score : "+str(self.score), arcade.color.BLACK, 50)
         self.bonus_text = arcade.create_text("Bonus : "+str(self.bonus), arcade.color.BLACK, 50)
+    def debug(self):
+        for animal in self.animal_C:
+            animal.debug()
     def Ylevel(self, y):
         return 107 + (71*y)
     def YGrass(self, y):

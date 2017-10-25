@@ -25,8 +25,6 @@ class Slingshot_fruit:
         self.fruit_S.draw()
         self.slingshot_S.draw_line_L()
         self.slingshotHand_S.draw()
-        '''__Debug__'''
-        #self.fruit_C.debug()
     def update(self):
         '''__Control part__'''
         ###########_startSpecial_###########
@@ -62,6 +60,8 @@ class Slingshot_fruit:
             self.map.fruit = self.fruit_C
             self.mouse.reset_mouse()
             self.map.score -= 10
+    def debug(self):
+        self.fruit_C.debug()
     def on_mouse_motion(self, x, y):
         self.mouse.x = x
         self.mouse.y = y

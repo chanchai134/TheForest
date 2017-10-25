@@ -30,6 +30,9 @@ class GameWindow(arcade.Window):
             self.map.draw()
             self.map.draw_text()
             self.map.draw_animal()
+            '''___debug___'''
+            #self.map.debug()
+            #self.control_fruit.debug()
         elif self.status == "scoreboard":
             self.control_fruit.draw()
             self.map.draw()
