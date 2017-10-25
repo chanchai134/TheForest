@@ -56,6 +56,12 @@ class Slingshot_fruit:
             self.map.fruit = self.fruit_C
             self.mouse.reset_mouse()
             self.map.score -= 10
+        if self.fruit_C.x > 710 - self.fruit_C.caught_radian and self.mouse.aimming:
+            self.fruit_C = self.random_fruit()
+            self.fruit_S = self.Get_sprite(self.fruit_C)
+            self.map.fruit = self.fruit_C
+            self.mouse.reset_mouse()
+            self.map.score -= 10
     def on_mouse_motion(self, x, y):
         self.mouse.x = x
         self.mouse.y = y

@@ -148,7 +148,39 @@ class Dragon_config(Eat_config):
 class Shoothill_config(Model_config):
     def __init__(self, x, y):
         super().__init__(x, y, "hill")
-
+    def isHit(self, model):
+        Y_equation = self.y
+        temp = (model.caught_radian - Y_equation + model.centerY)*(model.caught_radian + Y_equation - model.centerY)
+        if temp > 0:
+            x1 = math.sqrt(temp) + model.centerX
+            x2 = ((-1)*math.sqrt(temp)) + model.centerX
+            if (x1 > (self.x-248) and x1 < (self.x-106)) or (x2 > (self.x-248) and x2 < (self.x-106)):
+                return True
+        c = self.y-self.x+106
+        part_1 = 2*(model.centerY + model.centerX - c)
+        temp = 4*((c - model.centerY - model.centerX)**2)+8*(model.caught_radian**2 - model.centerX**2  - (c - model.centerY)**2)
+        if temp > 0:
+            x1 = (math.sqrt(temp) + part_1)/4
+            x2 = ((-1)*math.sqrt(temp) + part_1)/4
+            if (x1 > (self.x-106) and x1 < (self.x+35)) or (x2 > (self.x-106) and x2 < (self.x+35)):
+                return True
+        Y_equation = self.y+142
+        temp = (model.caught_radian - Y_equation + model.centerY)*(model.caught_radian + Y_equation - model.centerY)
+        if temp > 0:
+            x1 = math.sqrt(temp) + model.centerX
+            x2 = ((-1)*math.sqrt(temp)) + model.centerX
+            if (x1 > (self.x+35) and x1 < (self.x+106)) or (x2 > (self.x+35) and x2 < (self.x+106)):
+                return True
+        c = self.y+self.x+248
+        part_1 = 2*(model.centerX - model.centerY + c)
+        temp = 4*((model.centerX - model.centerY + c)**2)-8*(model.centerX**2 + (c - model.centerY)**2 - model.caught_radian**2)
+        if temp > 0:
+            x1 = (math.sqrt(temp) + part_1)/4
+            x2 = ((-1)*math.sqrt(temp) + part_1)/4
+            if (x1 > (self.x+106) and x1 < (self.x+248)) or (x2 > (self.x+106) and x2 < (self.x+248)):
+                return True        
+        return False  
+    
 class Ground_config(Model_config):
     def __init__(self, x, y):
         super().__init__(x, y, "ground")
