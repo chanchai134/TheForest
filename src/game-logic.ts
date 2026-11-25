@@ -39,6 +39,8 @@ export interface Animal extends Point {
   radius: number;
   centerOffsetX: number;
   centerOffsetY: number;
+  collisionRadiusX?: number;
+  collisionRadiusY?: number;
 }
 
 export interface TerrainBox extends Point {
@@ -61,10 +63,13 @@ const fruitSettings: Record<FruitKind, Pick<Fruit, "caughtRadius" | "ateRadius" 
   meat: { caughtRadius: 45, ateRadius: 35, centerOffsetX: -3, centerOffsetY: -7 },
 };
 
-const animalSettings: Record<AnimalKind, Pick<Animal, "radius" | "centerOffsetX" | "centerOffsetY">> = {
+const animalSettings: Record<AnimalKind, Pick<
+  Animal,
+  "radius" | "centerOffsetX" | "centerOffsetY" | "collisionRadiusX" | "collisionRadiusY"
+>> = {
   worm: { radius: 30, centerOffsetX: -20, centerOffsetY: 0 },
   monkey: { radius: 40, centerOffsetX: -10, centerOffsetY: 20 },
-  dragon: { radius: 60, centerOffsetX: -68, centerOffsetY: -50 },
+  dragon: { radius: 60, centerOffsetX: 0, centerOffsetY: 0, collisionRadiusX: 125, collisionRadiusY: 95 },
 };
 
 export function createFruit(kind: FruitKind, x = 327, y = 503): Fruit {
@@ -164,6 +169,20 @@ export function overlapsCircle(
   secondRadius: number,
 ): boolean {
   return Math.hypot(first.x - second.x, first.y - second.y) <= firstRadius + secondRadius;
+}
+
+export function overlapsCircleEllipse(
+  circle: Point,
+  circleRadius: number,
+  ellipse: Point,
+  ellipseRadiusX: number,
+  ellipseRadiusY: number,
+): boolean {
+  const radiusX = ellipseRadiusX + circleRadius;
+  const radiusY = ellipseRadiusY + circleRadius;
+  const dx = (circle.x - ellipse.x) / radiusX;
+  const dy = (circle.y - ellipse.y) / radiusY;
+  return dx * dx + dy * dy <= 1;
 }
 
 export function overlapsCircleBox(circle: Point, radius: number, box: Point, halfSize = 35): boolean {

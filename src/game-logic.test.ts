@@ -1,5 +1,13 @@
 import { describe, expect, it } from "vitest";
-import { createFruit, createTerrain, overlapsCircle, overlapsCircleBox, scoreAnimal } from "./game-logic";
+import {
+  createAnimal,
+  createFruit,
+  createTerrain,
+  overlapsCircle,
+  overlapsCircleBox,
+  overlapsCircleEllipse,
+  scoreAnimal,
+} from "./game-logic";
 
 describe("game rules", () => {
   it("uses the original matching-food bonus rules", () => {
@@ -11,6 +19,15 @@ describe("game rules", () => {
     expect(overlapsCircle({ x: 0, y: 0 }, 10, { x: 20, y: 0 }, 10)).toBe(true);
     expect(overlapsCircleBox({ x: 45, y: 0 }, 10, { x: 0, y: 0 })).toBe(true);
     expect(overlapsCircleBox({ x: 46, y: 0 }, 10, { x: 0, y: 0 })).toBe(false);
+  });
+
+  it("uses a centered, wide hit area for the dragon", () => {
+    const dragon = createAnimal("dragon", 100, 200);
+    expect(dragon.centerX).toBe(100);
+    expect(dragon.centerY).toBe(200);
+    expect(dragon.collisionRadiusX).toBe(125);
+    expect(overlapsCircleEllipse({ x: 230, y: 200 }, 10, { x: 100, y: 200 }, 125, 95)).toBe(true);
+    expect(overlapsCircleEllipse({ x: 240, y: 200 }, 10, { x: 100, y: 200 }, 125, 95)).toBe(false);
   });
 
   it("initializes each projectile with its original catch and hit radii", () => {

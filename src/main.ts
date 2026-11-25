@@ -7,6 +7,7 @@ import {
   GAME_WIDTH,
   GRAVITY,
   overlapsCircle,
+  overlapsCircleEllipse,
   overlapsCircleBox,
   pointInHill,
   randomFruit,
@@ -125,26 +126,24 @@ class GameScene extends ForestScene {
   }
 
   private addHud(): void {
-    this.scoreLabel = this.add.text(1550, GAME_HEIGHT - 800, "Score : 0", {
-      color: "#111111",
+    this.add.rectangle(GAME_WIDTH - 180, 70, 300, 86, 0xffffff, 0.9)
+      .setStrokeStyle(4, 0x231a18);
+    this.scoreLabel = this.add.text(GAME_WIDTH - 180, 51, "SCORE 0", {
+      color: "#231a18",
       fontFamily: "Arial, sans-serif",
-      fontSize: "50px",
-    });
-    this.bonusLabel = this.add.text(1550, GAME_HEIGHT - 720, "Bonus : 0", {
-      color: "#111111",
-      fontFamily: "Arial, sans-serif",
-      fontSize: "50px",
-    });
-    this.add.text(GAME_WIDTH / 2, GAME_HEIGHT - 60, "Some food have special skills. Hold the mouse button to use them.", {
-      color: "#111111",
-      fontFamily: "Arial, sans-serif",
-      fontSize: "20px",
+      fontSize: "32px",
+      fontStyle: "bold",
     }).setOrigin(0.5);
-    this.add.text(GAME_WIDTH / 2, GAME_HEIGHT - 25, "Some animals like certain food and give a bonus.", {
-      color: "#111111",
+    this.bonusLabel = this.add.text(GAME_WIDTH - 180, 89, "BONUS 0", {
+      color: "#c83228",
       fontFamily: "Arial, sans-serif",
-      fontSize: "20px",
+      fontSize: "24px",
+      fontStyle: "bold",
     }).setOrigin(0.5);
+    this.add.text(GAME_WIDTH / 2, GAME_HEIGHT - 24,
+      "HOLD IN FLIGHT: GRAPE DROP  •  BANANA LIFT  •  MEAT BOOST",
+      { color: "#231a18", fontFamily: "Arial, sans-serif", fontSize: "20px", fontStyle: "bold" })
+      .setOrigin(0.5);
   }
 
   private addProjectile(): void {
@@ -179,7 +178,7 @@ class GameScene extends ForestScene {
         this.dragging = false;
         this.fruit.aiming = false;
         this.fruit.launched = true;
-        this.fruit.velocityYNext = this.fruit.velocityYPrevious + GRAVITY;
+        this.fruit.velocityYNext = this.fruit.velocityYPrevious - GRAVITY;
       }
     });
   }
@@ -218,7 +217,7 @@ class GameScene extends ForestScene {
     if (this.checkHits()) return;
     if (this.fruit.x > GAME_WIDTH || this.fruit.x < 0 || this.fruit.y < 0) {
       this.score.score -= 10;
-      this.scoreLabel.setText(`Score : ${this.score.score}`);
+      this.scoreLabel.setText(`SCORE ${this.score.score}`);
       this.resetFruit();
     }
   }
@@ -229,6 +228,9 @@ class GameScene extends ForestScene {
         this.fruit.velocityX = this.fruit.startVelocityX;
         this.fruit.velocityYPrevious = this.fruit.frozenVelocityY + GRAVITY;
         this.fruit.velocityYNext = this.fruit.frozenVelocityYNext + GRAVITY;
+        this.fruit.specialAvailable = false;
+        this.fruit.specialPressed = false;
+      } else if (this.fruit.kind === "meat" && this.fruit.specialPressed && !this.pointerDown) {
         this.fruit.specialAvailable = false;
         this.fruit.specialPressed = false;
       }
@@ -248,6 +250,14 @@ class GameScene extends ForestScene {
         this.fruit.frozenVelocityYNext = this.fruit.velocityYNext;
         this.fruit.specialPressed = true;
       }
+    } else if (this.fruit.kind === "meat") {
+      const direction = Math.sign(this.fruit.startVelocityX) || 1;
+      const maxSpeed = Math.abs(this.fruit.startVelocityX) * 2;
+      this.fruit.velocityX = direction * Math.min(
+        Math.abs(this.fruit.velocityX) + 1.2 * frameScale,
+        maxSpeed,
+      );
+      this.fruit.specialPressed = true;
     }
     this.updateFruitCenter();
   }
@@ -276,19 +286,26 @@ class GameScene extends ForestScene {
 
   private checkHits(): boolean {
     for (const animal of this.animals) {
-      if (!overlapsCircle(
-        { x: animal.centerX, y: animal.centerY },
-        animal.radius,
-        { x: this.fruit.centerX, y: this.fruit.centerY },
-        this.fruit.ateRadius,
-      )) continue;
+      const fruitCenter = { x: this.fruit.centerX, y: this.fruit.centerY };
+      const animalCenter = { x: animal.centerX, y: animal.centerY };
+      const hit = animal.collisionRadiusX !== undefined && animal.collisionRadiusY !== undefined
+        ? overlapsCircleEllipse(
+          fruitCenter,
+          this.fruit.ateRadius,
+          animalCenter,
+          animal.collisionRadiusX,
+          animal.collisionRadiusY,
+        )
+        : overlapsCircle(animalCenter, animal.radius, fruitCenter, this.fruit.ateRadius);
+      if (!hit) continue;
 
       this.score = scoreAnimal(this.score, animal.kind, this.fruit.kind);
       this.animals = this.animals.filter((entry) => entry !== animal);
       this.animalSprites.get(animal)?.destroy();
       this.animalSprites.delete(animal);
-      this.scoreLabel.setText(`Score : ${this.score.score}`);
-      this.bonusLabel.setText(`Bonus : ${this.score.bonus}`);
+      this.scoreLabel.setText(`SCORE ${this.score.score}`);
+      this.bonusLabel.setText(`BONUS ${this.score.bonus}`);
+      this.showHitBurst(animal.centerX, animal.centerY);
       if (this.animals.length === 0) {
         this.scene.start("results", { score: this.score });
         return true;
@@ -306,7 +323,7 @@ class GameScene extends ForestScene {
       && pointInHill({ x: hillX, y: hillY });
     if (hitBox || hitHill) {
       this.score.score -= 10;
-      this.scoreLabel.setText(`Score : ${this.score.score}`);
+      this.scoreLabel.setText(`SCORE ${this.score.score}`);
       this.resetFruit();
       return true;
     }
@@ -318,6 +335,28 @@ class GameScene extends ForestScene {
     this.fruit = createFruit(randomFruit());
     this.fruitSprite.destroy();
     this.addProjectile();
+  }
+
+  private showHitBurst(x: number, y: number): void {
+    const burst = this.add.text(x, GAME_HEIGHT - y, "POW!", {
+      color: "#fff36a",
+      fontFamily: "Impact, Arial Black, sans-serif",
+      fontSize: "62px",
+      fontStyle: "bold",
+      stroke: "#231a18",
+      strokeThickness: 10,
+    }).setOrigin(0.5).setAngle(-8);
+
+    this.tweens.add({
+      targets: burst,
+      y: burst.y - 80,
+      scale: 1.35,
+      alpha: 0,
+      duration: 550,
+      ease: "Power2",
+      onComplete: () => burst.destroy(),
+    });
+    this.cameras.main.shake(160, 0.004);
   }
 }
 
